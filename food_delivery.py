@@ -1,10 +1,9 @@
-# Paste the completed class definitions here.
-#user 
 from abc import ABC, abstractmethod
 
 
 # 1. User (Abstract Base Class)
 class User(ABC):
+
     def __init__(self, name, phone):
         self._name = name
         self._phone = phone
@@ -28,13 +27,16 @@ class User(ABC):
 
 # 2. Customer
 class Customer(User):
+
     def __init__(self, name, phone, address):
         super().__init__(name, phone)
         self.address = address
         self.order_history = []
 
     def notify(self, message):
-        print(f"Customer Notification ({self._name}): {message}")
+        print(
+            f"Customer Notification ({self._name}): {message}"
+        )
 
     def display_profile(self):
         print("\n--- Customer Profile ---")
@@ -44,6 +46,7 @@ class Customer(User):
         print("Address:", self.address)
 
     def place_order(self, restaurant, items):
+
         if not restaurant.is_open():
             print("Restaurant is closed.")
             return None
@@ -64,24 +67,32 @@ class Customer(User):
 
         self._wallet_balance -= bill
         self.order_history.append(order)
-        self.notify(f"Order {order._order_id} placed successfully.")
+
+        self.notify(
+            f"Order {order._order_id} placed successfully."
+        )
+
         return order
 
 
 # 3. MenuItem
 class MenuItem:
+
     def __init__(self, name, price, is_veg):
         self.name = name
         self.price = price
         self.is_veg = is_veg
 
     def __repr__(self):
+
         food_type = "Veg" if self.is_veg else "Non-Veg"
+
         return f"{self.name} - ₹{self.price} ({food_type})"
 
 
 # 4. Restaurant
 class Restaurant:
+
     def __init__(self, name, location):
         self.name = name
         self.location = location
@@ -99,9 +110,11 @@ class Restaurant:
 
 # 5. Order
 class Order:
+
     _counter = 1
 
     def __init__(self, items):
+
         self._order_id = f"ORD{Order._counter}"
         Order._counter += 1
 
@@ -110,16 +123,26 @@ class Order:
         self._otp = 1234
 
     def calculate_bill(self):
-        subtotal = sum(item.price for item in self._items)
+
+        subtotal = sum(
+            item.price for item in self._items
+        )
+
         gst = subtotal * 0.05
         packaging_fee = 20
+
         return subtotal + gst + packaging_fee
 
     def estimated_time(self):
         return 30
 
     def update_status(self, new_status):
-        valid_statuses = ["Placed", "Accepted", "Delivered"]
+
+        valid_statuses = [
+            "Placed",
+            "Accepted",
+            "Delivered"
+        ]
 
         if new_status not in valid_statuses:
             print("Invalid order status.")
@@ -133,16 +156,23 @@ class Order:
 
 # 6. DeliveryPartner
 class DeliveryPartner(User):
+
     def __init__(self, name, phone, vehicle):
         super().__init__(name, phone)
+
         self.vehicle = vehicle
         self.is_available = True
         self.rating = 0.0
 
     def notify(self, message):
-        print(f"Delivery Partner Notification ({self._name}): {message}")
+
+        print(
+            f"Delivery Partner Notification "
+            f"({self._name}): {message}"
+        )
 
     def display_profile(self):
+
         print("\n--- Delivery Partner Profile ---")
         print("Name:", self._name)
         print("Phone:", self._phone)
@@ -152,6 +182,7 @@ class DeliveryPartner(User):
         print("Rating:", self.rating)
 
     def accept_order(self, order):
+
         if not self.is_available:
             print("Delivery partner is unavailable.")
             return False
@@ -161,11 +192,17 @@ class DeliveryPartner(User):
             return False
 
         order.update_status("Accepted")
+
         self.is_available = False
-        self.notify(f"Accepted order {order._order_id}.")
+
+        self.notify(
+            f"Accepted order {order._order_id}."
+        )
+
         return True
 
     def deliver(self, order, otp):
+
         if order._status != "Accepted":
             print("Order has not been accepted.")
             return False
@@ -175,7 +212,11 @@ class DeliveryPartner(User):
             return False
 
         order.update_status("Delivered")
-        self.is_available = True
-        self.notify(f"Order {order._order_id} delivered successfully.")
-        return True
 
+        self.is_available = True
+
+        self.notify(
+            f"Order {order._order_id} delivered successfully."
+        )
+
+        return True
