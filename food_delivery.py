@@ -16,6 +16,10 @@ class User(ABC):
         else:
             print("Invalid amount. Cannot add negative money.")
 
+    def add_wallet_balance(self, amount):
+        """Alias for add_to_wallet to support streamlit_app.py"""
+        return self.add_to_wallet(amount)
+
     @abstractmethod
     def notify(self, message):
         pass
@@ -122,6 +126,26 @@ class Order:
         self._status = "Placed"
         self._otp = 1234
 
+    @property
+    def order_id(self):
+        """Property to access order_id from streamlit_app.py"""
+        return self._order_id
+
+    @property
+    def status(self):
+        """Property to access status from streamlit_app.py"""
+        return self._status
+
+    @property
+    def items(self):
+        """Property to access items from streamlit_app.py"""
+        return self._items
+
+    @property
+    def otp(self):
+        """Property to access otp from streamlit_app.py"""
+        return self._otp
+
     def calculate_bill(self):
 
         subtotal = sum(
@@ -140,7 +164,7 @@ class Order:
 
         valid_statuses = [
             "Placed",
-            "Accepted",
+            "Order Accepted",
             "Delivered"
         ]
 
@@ -191,7 +215,7 @@ class DeliveryPartner(User):
             print("Order cannot be accepted.")
             return False
 
-        order.update_status("Accepted")
+        order.update_status("Order Accepted")
 
         self.is_available = False
 
@@ -203,7 +227,7 @@ class DeliveryPartner(User):
 
     def deliver(self, order, otp):
 
-        if order._status != "Accepted":
+        if order._status != "Order Accepted":
             print("Order has not been accepted.")
             return False
 
